@@ -21,5 +21,15 @@ fun readString(error: String = "Es un campo obligatorio"): String {
         return i
     }
     print(error)
-    return readString()
+    return readString(error)
+}
+
+fun readString(text:String, error: String = "Es un campo obligatorio"): String {
+    println(text)
+    val i = readLine()
+    i?.let {
+        return i
+    }
+    print(error)
+    return readString(text, error)
 }

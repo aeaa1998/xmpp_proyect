@@ -1,9 +1,15 @@
 package Auth
 
+import Utils.readString
+import XMPP.XMPPConnectionInstance.connection
 import XMPP.XMPPConnectionsFactory
+import com.sun.org.apache.xpath.internal.operations.Bool
 import org.jivesoftware.smack.SmackException
 import org.jivesoftware.smack.XMPPException
+import org.jivesoftware.smack.packet.Presence
+import org.jivesoftware.smack.packet.PresenceBuilder
 import org.jivesoftware.smackx.iqregister.AccountManager
+import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.parts.Localpart
 import java.io.IOException
 
@@ -32,6 +38,9 @@ object Auth {
 
     fun login(username: String, password: String, notify: Boolean): Boolean{
         try {
+            if (!connection.isConnected){
+                connection.connect()
+            }
             authConnection.login(username, password)
             loggedUser = User(username, password)
             println("Se ha iniciado con exito la sesión")
@@ -53,27 +62,45 @@ object Auth {
         accountManager.sensitiveOperationOverInsecureConnection(true)
         try {
             accountManager.deleteAccount()
+            println("Se elimino de manera exitosa el usaurio")
         }catch (e: Exception){
             println("Ocurrio un error inesperado al borrar la cuenta")
         }
 
-        if (authConnection.isConnected){
+        if (!authConnection.isConnected){
             authConnection.connect()
         }
 
     }
 
-    fun logout(notify: Boolean){
+    fun logout(){
         loggedUser = null
-        //TODO: Implement notification
+        connection.connect()
     }
 
-    fun createUser(username: String, password: String){
+    fun createUser(username: String, password: String) : Boolean {
         val accountManager = AccountManager.getInstance(authConnection)
         accountManager.sensitiveOperationOverInsecureConnection(true)
+        val firstName = readString("Ingrese su primer nombre")
+        val lastName = readString("Ingrese su primer apellido")
+        val email = readString("Ingrese su email")
         try {
+            if (!connection.isConnected){
+                connection.connect()
+            }
             accountManager.createAccount(Localpart.from(username), password)
+            val vCard = VCardManager.getInstanceFor(connection)
+            val card = vCard.loadVCard()
+            card.firstName = firstName
+            card.nickName = "$firstName $lastName"
+            card.emailHome = email
+            card.emailWork = email
+            card.lastName = lastName
+            connection.sendStanza(PresenceBuilder.buildPresence().ofType(Presence.Type.subscribe).build())
+            vCard.saveVCard(card)
+            loggedUser = User(username, password)
             println("Se ha creado el usuario con exito")
+            return true
         } catch (e: SmackException.NoResponseException){
             println("No se obtuvo respuesta del servidor")
             e.printStackTrace()
@@ -88,5 +115,6 @@ object Auth {
                 println("El usuario: $username ya existe")
             }
         }
+        return false
     }
 }

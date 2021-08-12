@@ -20,6 +20,18 @@ fun <R>List<R>.getIndexOfOption(): Int {
     }
 }
 
+fun <R>List<R>.getIndexOfOption(text:String): Int {
+    require(this.isNotEmpty())
+    while (true){
+        println(text+"\n")
+        printMenu()
+        val i = readLineInt()
+        if (i > 0 && i <= count()){
+            return i-1
+        }
+    }
+}
+
 fun <R>List<R>.selectValidOption(): R {
     require(this.isNotEmpty())
     while (true){

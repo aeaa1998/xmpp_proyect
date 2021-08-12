@@ -166,23 +166,23 @@ class MainMenu: IncomingChatMessageListener, MessageListener, FileTransferListen
                                     if (file.exists()) {
 
 
-                                        transfer.setCallback(object : OutgoingFileTransfer.NegotiationProgress {
-                                            override fun statusUpdated(
-                                                oldStatus: FileTransfer.Status?,
-                                                newStatus: FileTransfer.Status?
-                                            ) {
-                                                println(oldStatus)
-                                            }
-
-                                            override fun outputStreamEstablished(stream: OutputStream?) {
-                                                println(stream)
-                                            }
-
-                                            override fun errorEstablishingStream(e: java.lang.Exception?) {
-
-                                            }
-
-                                        })
+//                                        transfer.setCallback(object : OutgoingFileTransfer.NegotiationProgress {
+//                                            override fun statusUpdated(
+//                                                oldStatus: FileTransfer.Status?,
+//                                                newStatus: FileTransfer.Status?
+//                                            ) {
+//                                                println(oldStatus)
+//                                            }
+//
+//                                            override fun outputStreamEstablished(stream: OutputStream?) {
+//                                                println(stream)
+//                                            }
+//
+//                                            override fun errorEstablishingStream(e: java.lang.Exception?) {
+//
+//                                            }
+//
+//                                        })
                                         transfer.sendFile(file, "potente")
                                     }
                                 }

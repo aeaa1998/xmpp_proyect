@@ -81,9 +81,9 @@ object Auth {
     fun createUser(username: String, password: String) : Boolean {
         val accountManager = AccountManager.getInstance(authConnection)
         accountManager.sensitiveOperationOverInsecureConnection(true)
-        val firstName = readString("Ingrese su primer nombre")
-        val lastName = readString("Ingrese su primer apellido")
-        val email = readString("Ingrese su email")
+        val firstName = readString("Ingrese su primer nombre", "Requerido")
+        val lastName = readString("Ingrese su primer apellido", "Requerido")
+        val email = readString("Ingrese su email", "Requerido")
         try {
             if (!connection.isConnected){
                 connection.connect()

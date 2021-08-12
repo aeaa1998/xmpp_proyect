@@ -10,18 +10,18 @@ object XMPPConnectionsFactory {
         val config = XMPPTCPConnectionConfiguration
             .builder()
             .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
-            .setServiceName("localhost")
+            .setXmppDomain("localhost")
 
 //            .setResource("Rooster")
             .setHost("127.0.0.1")
 //            .setKeystoreType(null)
 //            .enableDefaultDebugger()
             .setPort(Constants.port)
-            .apply {
-                user?.let {
-//                    setUsernameAndPassword(user.username, user.password)
-                }
-            }
+//            .apply {
+//                user?.let {
+////                    setUsernameAndPassword(user.username, user.password)
+//                }
+//            }
 //            .setDebuggerEnabled(true)
             .setSendPresence(true)
             .setCompressionEnabled(false)

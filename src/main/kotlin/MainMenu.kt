@@ -166,23 +166,23 @@ class MainMenu: IncomingChatMessageListener, MessageListener, FileTransferListen
                                     if (file.exists()) {
 
 
-//                                        transfer.setCallback(object : OutgoingFileTransfer.NegotiationProgress {
-//                                            override fun statusUpdated(
-//                                                oldStatus: FileTransfer.Status?,
-//                                                newStatus: FileTransfer.Status?
-//                                            ) {
+                                        transfer.setCallback(object : OutgoingFileTransfer.NegotiationProgress {
+                                            override fun statusUpdated(
+                                                oldStatus: FileTransfer.Status?,
+                                                newStatus: FileTransfer.Status?
+                                            ) {
 //                                                println(oldStatus)
-//                                            }
-//
-//                                            override fun outputStreamEstablished(stream: OutputStream?) {
+                                            }
+
+                                            override fun outputStreamEstablished(stream: OutputStream?) {
 //                                                println(stream)
-//                                            }
-//
-//                                            override fun errorEstablishingStream(e: java.lang.Exception?) {
-//
-//                                            }
-//
-//                                        })
+                                            }
+
+                                            override fun errorEstablishingStream(e: java.lang.Exception?) {
+
+                                            }
+
+                                        })
                                         transfer.sendFile(file, "potente")
                                     }
                                 }
@@ -343,8 +343,9 @@ class MainMenu: IncomingChatMessageListener, MessageListener, FileTransferListen
         if (isInPersonalChat){
             println("$fromR: ${message?.body}")
         }else{
-            println("Notificación: Has recibido un mensaje de: ${fromR}")
+            println("Nuevo mensaje de $fromR")
         }
+
     }
 
     //GROUP

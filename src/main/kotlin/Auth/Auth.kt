@@ -15,18 +15,10 @@ import java.io.IOException
 
 
 object Auth {
-    val authConnection by lazy {
-        XMPPConnectionsFactory.create().also {
-            it.connect()
-        }
-    }
-
-
-
 
     var loggedUser: User? = null
     set(value) {
-        authConnection.disconnect()
+        if (value == null) connection.disconnect()
         field = value
     }
 
@@ -41,7 +33,7 @@ object Auth {
             if (!connection.isConnected){
                 connection.connect()
             }
-            authConnection.login(username, password)
+            connection.login(username, password)
             loggedUser = User(username, password)
             println("Se ha iniciado con exito la sesión")
             return true
@@ -58,7 +50,7 @@ object Auth {
     }
 
     fun deleteAccount(){
-        val accountManager = AccountManager.getInstance(authConnection)
+        val accountManager = AccountManager.getInstance(connection)
         accountManager.sensitiveOperationOverInsecureConnection(true)
         try {
             accountManager.deleteAccount()
@@ -67,8 +59,8 @@ object Auth {
             println("Ocurrio un error inesperado al borrar la cuenta")
         }
 
-        if (!authConnection.isConnected){
-            authConnection.connect()
+        if (!connection.isConnected){
+            connection.connect()
         }
 
     }
@@ -79,7 +71,7 @@ object Auth {
     }
 
     fun createUser(username: String, password: String) : Boolean {
-        val accountManager = AccountManager.getInstance(authConnection)
+        val accountManager = AccountManager.getInstance(connection)
         accountManager.sensitiveOperationOverInsecureConnection(true)
         val firstName = readString("Ingrese su primer nombre", "Requerido")
         val lastName = readString("Ingrese su primer apellido", "Requerido")
@@ -89,6 +81,7 @@ object Auth {
                 connection.connect()
             }
             accountManager.createAccount(Localpart.from(username), password)
+            connection.login(username, password)
             val vCard = VCardManager.getInstanceFor(connection)
             val card = vCard.loadVCard()
             card.firstName = firstName
@@ -96,7 +89,7 @@ object Auth {
             card.emailHome = email
             card.emailWork = email
             card.lastName = lastName
-            connection.sendStanza(PresenceBuilder.buildPresence().ofType(Presence.Type.subscribe).build())
+//            connection.sendStanza(PresenceBuilder.buildPresence().ofType(Presence.Type.subscribe).build())
             vCard.saveVCard(card)
             loggedUser = User(username, password)
             println("Se ha creado el usuario con exito")

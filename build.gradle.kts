@@ -21,13 +21,15 @@ repositories {
 dependencies {
     testImplementation(kotlin("test-junit"))
 
-    implementation("org.igniterealtime.smack:smack-java8:4.4.0")
+    implementation("org.igniterealtime.smack:smack-java8:4.4.3")
     // Optional for XMPPTCPConnection
-    implementation("org.igniterealtime.smack:smack-tcp:4.4.0")
+    implementation("org.igniterealtime.smack:smack-tcp:4.4.3")
     // Optional for XMPP-IM (RFC 6121) support (Roster, Threaded Chats, …)
-    implementation("org.igniterealtime.smack:smack-im:4.4.0")
+    implementation("org.igniterealtime.smack:smack-im:4.4.3")
     // Optional for XMPP extensions support
-    implementation("org.igniterealtime.smack:smack-extensions:4.4.0")
+    implementation("org.igniterealtime.smack:smack-extensions:4.4.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
+
 }
 
 tasks.test {

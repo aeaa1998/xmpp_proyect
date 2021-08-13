@@ -50,6 +50,9 @@ object Auth {
     }
 
     fun deleteAccount(){
+        if (!connection.isConnected){
+            connection.connect()
+        }
         val accountManager = AccountManager.getInstance(connection)
         accountManager.sensitiveOperationOverInsecureConnection(true)
         try {
@@ -62,6 +65,7 @@ object Auth {
         if (!connection.isConnected){
             connection.connect()
         }
+
 
     }
 

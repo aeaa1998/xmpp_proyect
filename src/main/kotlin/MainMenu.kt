@@ -44,7 +44,7 @@ class MainMenu: IncomingChatMessageListener, MessageListener, FileTransferListen
         chatManager = ChatManager.getInstanceFor(connection)
         val multiUserChatManager = MultiUserChatManager.getInstanceFor(connection)
         multiUserChatManager.setAutoJoinOnReconnect(true)
-        groupChat = multiUserChatManager.getMultiUserChat(JidCreate.entityBareFrom("everyone@conference.localhost"))
+        groupChat = multiUserChatManager.getMultiUserChat(JidCreate.entityBareFrom("everyone@conference.${connection.xmppServiceDomain}"))
         groupChat.join(Resourcepart.from(Auth.loggedUser?.username ?: ""))
         groupChat.addMessageListener(this)
         chatManager.addIncomingListener(this)
@@ -217,7 +217,7 @@ class MainMenu: IncomingChatMessageListener, MessageListener, FileTransferListen
                     Auth.loggedUser?.let {
                         groupChat.sendMessage("Notificación: ${it.username} ha cerrado sesión")
                     }
-
+                    groupChat.leave()
                     Auth.logout()
                     break
                 }
